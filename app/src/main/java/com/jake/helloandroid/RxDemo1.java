@@ -83,11 +83,6 @@ public class RxDemo1 extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-//        myDisposable.dispose();
-//        myObserver.dispose();
-//        myObserver2.dispose();
-
         compositeDisposable.clear();
     }
 }
