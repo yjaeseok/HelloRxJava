@@ -24,8 +24,6 @@ public class RxDemo1 extends AppCompatActivity {
     private TextView textView;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-//    private Disposable myDisposable;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,34 +31,6 @@ public class RxDemo1 extends AppCompatActivity {
 
         textView = findViewById(R.id.tvGreeting);
         myObservable = Observable.just(greeting);
-
-        myObservable.subscribeOn(Schedulers.io());
-
-        myObservable.observeOn(AndroidSchedulers.mainThread());
-
-//        myObserver = new Observer<String>() {
-//            @Override
-//            public void onSubscribe(Disposable d) {
-//                Log.i(TAG, "onSubscribe invoked");
-//                myDisposable = d;
-//            }
-//
-//            @Override
-//            public void onNext(String s) {
-//                Log.i(TAG, "onNext invoked");
-//                textView.setText(s);
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                Log.i(TAG, "onError invoked");
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//                Log.i(TAG, "onComplete invoked");
-//            }
-//        };
 
         myObserver = new DisposableObserver<String>() {
             @Override
@@ -80,8 +50,12 @@ public class RxDemo1 extends AppCompatActivity {
             }
         };
 
-        compositeDisposable.add(myObserver);
-        myObservable.subscribe(myObserver);
+        compositeDisposable.add(
+                myObservable
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(myObserver)
+        );
 
         myObserver2 = new DisposableObserver<String>() {
             @Override
@@ -101,8 +75,9 @@ public class RxDemo1 extends AppCompatActivity {
             }
         };
 
-        compositeDisposable.add(myObserver2);
-        myObservable.subscribe(myObserver2);
+        compositeDisposable.add(
+                myObservable.subscribeWith(myObserver2)
+        );
     }
 
     @Override
