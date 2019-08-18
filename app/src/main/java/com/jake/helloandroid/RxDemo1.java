@@ -21,6 +21,8 @@ public class RxDemo1 extends AppCompatActivity {
 
     private TextView textView;
 
+    private Disposable myDisposable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,7 @@ public class RxDemo1 extends AppCompatActivity {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.i(TAG, "onSubscribe invoked");
+                myDisposable = d;
             }
 
             @Override
@@ -57,5 +60,12 @@ public class RxDemo1 extends AppCompatActivity {
         };
 
         myObservable.subscribe(myObserver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        myDisposable.dispose();
     }
 }
