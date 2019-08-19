@@ -14,7 +14,6 @@ import io.reactivex.schedulers.Schedulers;
 public class RxDemo2 extends AppCompatActivity {
 
     private static final String TAG = "RxDemo2";
-    private Integer[] nums = {1, 2, 3, 4, 5};
     private Observable<Integer> myObservable;
     private DisposableObserver<Integer> myObserver;
 
@@ -25,7 +24,7 @@ public class RxDemo2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx_demo02);
 
-        myObservable = Observable.fromArray(nums);
+        myObservable = Observable.range(1, 5);
 
         compositeDisposable.add(
                 myObservable
