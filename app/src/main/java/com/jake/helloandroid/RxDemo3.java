@@ -12,6 +12,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -42,6 +43,13 @@ public class RxDemo3 extends AppCompatActivity {
                 myObservable
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
+                        .map(new Function<Student, Student>() {
+                            @Override
+                            public Student apply(Student student) throws Exception {
+                                student.setName(student.getName().toUpperCase());
+                                return student;
+                            }
+                        })
                         .subscribeWith(getObserver())
         );
     }
@@ -50,7 +58,7 @@ public class RxDemo3 extends AppCompatActivity {
         myObserver = new DisposableObserver<Student>() {
             @Override
             public void onNext(Student student) {
-                Log.i(TAG, "onNext invoked with " + student.getEmail());
+                Log.i(TAG, "onNext invoked with " + student.getName());
             }
 
             @Override
